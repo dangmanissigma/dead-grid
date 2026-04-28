@@ -1,0 +1,442 @@
+/* =============================================
+   DEAD GRID — style.css
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --red:     #e63946;
+  --green:   #2dc653;
+  --yellow:  #f4d03f;
+  --dark:    #0a0a0a;
+  --panel:   #111317;
+  --border:  #2a2d35;
+  --text:    #c8cdd8;
+  --dim:     #555b6e;
+  --white:   #f0f2f7;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: var(--dark);
+  font-family: 'Share Tech Mono', monospace;
+  color: var(--text);
+  cursor: crosshair;
+}
+
+/* =============================================
+   CANVAS
+   ============================================= */
+#gameCanvas {
+  display: block;
+  position: fixed;
+  top: 0; left: 0;
+}
+
+/* =============================================
+   OVERLAYS
+   ============================================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.88);
+  z-index: 100;
+}
+.overlay.hidden { display: none; }
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 48px 56px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 60px rgba(230,57,70,0.2);
+}
+
+/* START SCREEN */
+.game-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 96px;
+  letter-spacing: 8px;
+  line-height: 1;
+}
+.title-dead { color: var(--red); }
+.title-grid { color: var(--white); }
+
+.subtitle {
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.controls-info {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--dim);
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  letter-spacing: 1px;
+}
+
+/* GAME OVER */
+.game-over-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 80px;
+  color: var(--red);
+  letter-spacing: 6px;
+  text-shadow: 0 0 40px rgba(230,57,70,0.5);
+}
+
+.final-stats {
+  display: flex;
+  gap: 40px;
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 1px;
+}
+.final-stats div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.final-stats .stat-val { font-size: 28px; color: var(--yellow); font-family: 'Bebas Neue', sans-serif; }
+
+/* PAUSE */
+.pause-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 64px;
+  color: var(--yellow);
+  letter-spacing: 6px;
+}
+
+/* =============================================
+   BUTTONS
+   ============================================= */
+.btn-primary {
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  padding: 14px 40px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+.btn-primary:hover { background: #ff4a58; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--dim);
+  border: 1px solid var(--border);
+  padding: 10px 28px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.btn-secondary:hover { color: var(--text); border-color: var(--text); }
+
+/* =============================================
+   HUD
+   ============================================= */
+.hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+.hud.hidden { display: none; }
+
+.hud-left {
+  position: absolute;
+  top: 16px; left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.hud-right {
+  position: absolute;
+  top: 16px; right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.hud-center {
+  position: absolute;
+  bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  pointer-events: all;
+}
+
+.hud-hp, .hud-wave, .hud-money, .hud-weapon, .hud-kills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10,10,10,0.75);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  backdrop-filter: blur(4px);
+}
+
+.hud-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.hud-val { font-size: 13px; color: var(--text); }
+.hud-val-big { font-size: 20px; font-family: 'Bebas Neue', sans-serif; color: var(--white); letter-spacing: 1px; }
+
+.hp-bar-bg {
+  width: 100px;
+  height: 8px;
+  background: #1a1c22;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.hp-bar {
+  height: 100%;
+  background: var(--green);
+  transition: width .2s, background .3s;
+}
+
+/* HUD BUTTONS */
+.btn-hud, .btn-skip {
+  background: rgba(10,10,10,0.85);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.btn-hud:hover { background: rgba(255,255,255,0.05); border-color: var(--text); color: var(--white); }
+
+.btn-skip {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+.btn-skip:hover { background: rgba(244,208,63,0.1); }
+
+.btn-close {
+  background: transparent;
+  color: var(--dim);
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color .15s;
+}
+.btn-close:hover { color: var(--red); }
+
+.btn-close-sm {
+  background: transparent;
+  color: var(--red);
+  border: 1px solid var(--red);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 5px 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background .15s;
+}
+.btn-close-sm:hover { background: rgba(230,57,70,0.1); }
+
+/* =============================================
+   WAVE ANNOUNCE
+   ============================================= */
+.wave-announce {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  letter-spacing: 6px;
+  color: var(--white);
+  text-align: center;
+  pointer-events: none;
+  z-index: 60;
+  text-shadow: 0 0 30px rgba(230,57,70,0.6);
+  transition: opacity .4s;
+}
+.wave-announce.hidden { display: none; }
+.wave-announce .modifier-tag {
+  display: block;
+  font-size: 18px;
+  color: var(--yellow);
+  letter-spacing: 3px;
+  margin-top: 4px;
+}
+
+/* =============================================
+   SHOP
+   ============================================= */
+.shop-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.75);
+  z-index: 80;
+}
+.shop-overlay.hidden { display: none; }
+
+.shop-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 50px rgba(0,0,0,0.6);
+}
+
+.shop-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.shop-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 4px;
+  flex: 1;
+}
+.shop-money {
+  color: var(--yellow);
+  font-size: 16px;
+}
+
+.shop-sections { padding: 16px; display: flex; flex-direction: column; gap: 20px; }
+.shop-section {}
+.section-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--dim);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+.shop-items { display: flex; flex-direction: column; gap: 6px; }
+
+.shop-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+.shop-item:hover:not(.owned):not(.cant-afford) { background: rgba(255,255,255,0.05); border-color: var(--green); }
+.shop-item.owned { border-color: var(--green); opacity: .6; cursor: default; }
+.shop-item.cant-afford { opacity: .4; cursor: not-allowed; }
+.shop-item.equipped { border-color: var(--yellow); }
+
+.item-icon { font-size: 20px; width: 28px; text-align: center; }
+.item-info { flex: 1; }
+.item-name { font-size: 12px; color: var(--white); letter-spacing: 1px; }
+.item-desc { font-size: 10px; color: var(--dim); margin-top: 2px; }
+.item-price { font-size: 13px; color: var(--yellow); }
+.item-badge { font-size: 9px; padding: 2px 6px; background: var(--green); color: var(--dark); letter-spacing: 1px; }
+
+/* =============================================
+   BUILD MENU
+   ============================================= */
+.build-menu {
+  position: fixed;
+  left: 50%;
+  top: 16px;
+  transform: translateX(-50%);
+  background: rgba(10,10,10,0.92);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(8px);
+}
+.build-menu.hidden { display: none; }
+
+.build-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 3px;
+  color: var(--yellow);
+  margin-right: 4px;
+}
+
+.build-items { display: flex; gap: 8px; }
+
+.build-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  min-width: 72px;
+}
+.build-item:hover { border-color: var(--yellow); background: rgba(244,208,63,0.05); }
+.build-item.selected { border-color: var(--yellow); background: rgba(244,208,63,0.1); }
+.build-item .b-icon { font-size: 18px; }
+.build-item .b-name { font-size: 9px; letter-spacing: 1px; color: var(--text); }
+.build-item .b-cost { font-size: 10px; color: var(--yellow); }
+
+/* =============================================
+   DAMAGE NUMBERS (canvas-overlaid via DOM)
+   ============================================= */
+.dmg-number {
+  position: fixed;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--red);
+  pointer-events: none;
+  z-index: 55;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+  animation: floatUp .7s forwards;
+}
+.dmg-number.green { color: var(--green); }
+.dmg-number.yellow { color: var(--yellow); }
+
+@keyframes floatUp {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-40px); }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--border); }

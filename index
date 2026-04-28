@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DEAD GRID — Zombie Survival</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- START SCREEN -->
+<div id="startScreen" class="overlay">
+  <div class="overlay-content">
+    <div class="game-title">
+      <span class="title-dead">DEAD</span><span class="title-grid">GRID</span>
+    </div>
+    <p class="subtitle">Survive the endless horde</p>
+    <div class="controls-info">
+      <span>WASD — Move</span>
+      <span>Mouse — Aim & Shoot</span>
+      <span>B — Build Mode</span>
+      <span>SPACE — Shop</span>
+    </div>
+    <button id="startBtn" class="btn-primary">START GAME</button>
+  </div>
+</div>
+
+<!-- GAME OVER SCREEN -->
+<div id="gameOverScreen" class="overlay hidden">
+  <div class="overlay-content">
+    <div class="game-over-title">YOU DIED</div>
+    <div id="finalStats" class="final-stats"></div>
+    <button id="restartBtn" class="btn-primary">PLAY AGAIN</button>
+  </div>
+</div>
+
+<!-- WAVE ANNOUNCE -->
+<div id="waveAnnounce" class="wave-announce hidden"></div>
+
+<!-- SHOP OVERLAY -->
+<div id="shopOverlay" class="shop-overlay hidden">
+  <div class="shop-panel">
+    <div class="shop-header">
+      <span class="shop-title">SHOP</span>
+      <span id="shopMoney" class="shop-money">$0</span>
+      <button id="closeShop" class="btn-close">✕</button>
+    </div>
+    <div class="shop-sections">
+      <!-- WEAPONS -->
+      <div class="shop-section">
+        <div class="section-label">WEAPONS</div>
+        <div class="shop-items" id="weaponItems"></div>
+      </div>
+      <!-- UPGRADES -->
+      <div class="shop-section">
+        <div class="section-label">UPGRADES</div>
+        <div class="shop-items" id="upgradeItems"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILD MENU -->
+<div id="buildMenu" class="build-menu hidden">
+  <div class="build-title">BUILD</div>
+  <div id="buildItems" class="build-items"></div>
+  <button id="closeBuild" class="btn-close-sm">✕ EXIT</button>
+</div>
+
+<!-- MAIN CANVAS -->
+<canvas id="gameCanvas"></canvas>
+
+<!-- HUD -->
+<div id="hud" class="hud hidden">
+  <div class="hud-left">
+    <div class="hud-hp">
+      <span class="hud-label">HP</span>
+      <div class="hp-bar-bg"><div id="hpBar" class="hp-bar"></div></div>
+      <span id="hpText" class="hud-val">100</span>
+    </div>
+    <div class="hud-wave">
+      <span class="hud-label">WAVE</span>
+      <span id="waveNum" class="hud-val-big">1</span>
+    </div>
+    <div class="hud-money">
+      <span class="hud-label">$</span>
+      <span id="moneyDisplay" class="hud-val-big">0</span>
+    </div>
+  </div>
+  <div class="hud-right">
+    <div class="hud-weapon">
+      <span class="hud-label">WEAPON</span>
+      <span id="weaponName" class="hud-val">Pistol</span>
+    </div>
+    <div class="hud-kills">
+      <span class="hud-label">KILLS</span>
+      <span id="killCount" class="hud-val-big">0</span>
+    </div>
+  </div>
+  <div class="hud-center">
+    <button id="skipWaveBtn" class="btn-skip">⏭ SKIP WAVE (+$150)</button>
+    <button id="shopBtn" class="btn-hud">[SPACE] SHOP</button>
+    <button id="buildBtn" class="btn-hud">[B] BUILD</button>
+    <button id="pauseBtn" class="btn-hud">⏸ PAUSE</button>
+  </div>
+</div>
+
+<!-- PAUSED -->
+<div id="pauseScreen" class="overlay hidden">
+  <div class="overlay-content">
+    <div class="pause-title">PAUSED</div>
+    <button id="resumeBtn" class="btn-primary">RESUME</button>
+    <button id="restartFromPause" class="btn-secondary">RESTART</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
